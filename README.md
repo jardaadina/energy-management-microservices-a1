@@ -1,63 +1,70 @@
-# DS2025_30645_Jarda_Adina_Assignment_1
+# Energy Management System (Distributed Systems)
 
-Energy Management Project
-This is a full-stack project for managing users and their devices. It uses a microservice system.
+## Assignment Overview
+This project implements an **Energy Management System** that allows authenticated users to access, monitor, and manage smart energy metering devices.
+The system is designed as a set of loosely coupled, containerized microservices, orchestrated through a reverse proxy and an API Gateway.
 
-How it Works
-The project has a simple flow:
+## Architecture
+The system follows a microservices architecture using the **Request-Reply Communication Paradigm**. All components are deployed independently using Docker.
 
-Frontend (React) → API Gateway (Traefik) → Backend Services (Spring Boot) → Databases (PostgreSQL)
 
-What's Inside
-The system is made of a few main parts:
 
-1. Frontend
-   User Interface (React): A web app that the user sees and clicks on (from the image_60ae30.png file).
+### System Components
+The solution includes the following distinct components:
+1.  **Frontend Application (Web Client)**: A browser-based interface that manages user interactions and restricts access based on roles[cite: 22].
+2.  **API Gateway & Reverse Proxy**: Acts as the entry point, routing requests and performing validation and security policies[cite: 23].
+3.  **Microservices Layer**:
+    * **User Management Service**: Handles CRUD operations for user accounts.
+    * **Device Management Service**: Handles CRUD operations for devices and mapping to users.
+    * **Authorization Service**: Handles login, registration, and token generation (JWT).
 
-2. Gateway
-   Traefik (API Gateway): A smart router. All API requests from the frontend go to Traefik first. It then sends the request to the correct backend service.
+## User Roles & Functionalities
+The platform supports two types of users:
 
-Nginx (Web Server): A simple server to send the React app's files to the user's browser.
+### 1. Administrator
+* **CRUD on Users**: Create, read, update, and delete user accounts.
+* **CRUD on Devices**: Create, read, update, and delete smart devices.
+* **Mapping**: Associate specific devices with specific users.
 
-3. Backend Services
-   These are three separate Spring Boot apps. Each app has its own job and its own database.
+### 2. Client 
+* **Login**: Secure authentication.
+* **View Devices**: See a list of smart energy devices assigned to their account.
 
-authentication-service (Port 8083)
+## Tech Stack
+The following technologies were used (or recommended) for implementation:
 
-Handles user login and checks if a user is allowed to do things.
+* **Deployment**: Docker (Mandatory) 
+* **Backend**: Java Spring Boot (REST)
+* **Frontend**: ReactJS
+* **Database**: PostgreSQL / MySQL
+* **Reverse Proxy**: Traefik
+* **Communication**: RESTful APIs
 
-Creates and checks security tokens (JWT).
+## Data Models
+* **User**: `ID`, `username`, `password` (minimum attributes).
+* **Device**: `ID`, `name`, `maximum consumption` (minimum attributes).
 
-Connects to the auth_db database.
+## How to Run
+1.  **Clone the repository**:
+    ```bash
+    git clone <repository_url>
+    ```
+2.  **Build Docker Containers**:
+    Ensure Docker Desktop is running.
+    ```bash
+    docker-compose build
+    ```
+3.  **Start the System**:
+    ```bash
+    docker-compose up
+    ```
+4.  **Access the Application**:
+    * Frontend: `http://localhost:3000` (Default)
+    * API Documentation: `http://localhost:8080/swagger-ui.html` (If configured) 
 
-user-service (Port 8081)
-
-Manages user information (create, read, update, delete users).
-
-Talks to the authentication-service when a new user signs up.
-
-Connects to the user_db database.
-
- device-service (Port 8082)
-
-Manages the devices (create, read, update, delete devices).
-
-Also manages which devices belong to which user.
-
-Connects to the device_db database.
-
-Technology Used
-Backend: Java, Spring Boot 3, Spring Security (JWT).
-
-Frontend: React.js.
-
-Database: PostgreSQL (each service has its own).
-
-System: Docker, Traefik (API Gateway).
-
-API Docs: OpenAPI (Swagger) (all backend services have this).
-
-How to Run
-This whole application is built to run using Docker.
-
-Each service has its own Dockerfile. You will use docker-compose to start and connect all the services at the same time.
+## Deliverables
+This repository includes:
+* Source code for all microservices.
+* `docker-compose.yml` for orchestration.
+* UML Deployment Diagram.
+* Database dumps.
